@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.4.0-base-ubuntu20.04
+FROM nvidia/cuda:11.2.1-base-ubuntu20.04
 
 LABEL base.image="ubuntu:xenial"
 LABEL maintainer="Jonas Demeulemeester"
