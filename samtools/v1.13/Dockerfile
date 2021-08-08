@@ -1,9 +1,9 @@
-FROM ubuntu:xenial
+FROM ubuntu:focal
 
 # for easy upgrade later. ARG variables only persist during image build
 ARG SAMTOOLSVER=1.13
 
-LABEL base.image="ubuntu:xenial"
+LABEL base.image="ubuntu:focal"
 LABEL dockerfile.version="1"
 LABEL software="Samtools"
 LABEL software.version="1.13"
@@ -12,6 +12,9 @@ LABEL website="https://github.com/samtools/samtools"
 LABEL license="https://github.com/samtools/samtools/blob/develop/LICENSE"
 LABEL maintainer="Jonas Demeulemeester"
 LABEL maintainer.email="jonas.demeulemeester@kuleuven.be"
+
+ENV TZ=Europe/Brussels
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # install dependencies and clean up apt garbage
 RUN apt-get update && apt-get install --no-install-recommends -y \

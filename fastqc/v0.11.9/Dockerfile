@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:focal
 
 # for easy upgrade later. ARG variables only persist during image build
 ARG FASTQCVER=0.11.9

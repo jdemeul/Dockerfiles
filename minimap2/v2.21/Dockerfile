@@ -1,10 +1,10 @@
-FROM ubuntu:xenial
+FROM ubuntu:focal
 
 # for easy upgrade later. ARG variables only persist during image build time
 ARG MINIMAP2_VER="2.21"
 
 # metadata
-LABEL base.image="ubuntu:xenial"
+LABEL base.image="ubuntu:focal"
 LABEL dockerfile.version="1"
 LABEL software="Minimap2"
 LABEL software.version="2.21"

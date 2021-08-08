@@ -1,6 +1,6 @@
-FROM ubuntu:xenial
+FROM ubuntu:focal
 
-LABEL base.image="ubuntu:xenial"
+LABEL base.image="ubuntu:focal"
 LABEL maintainer="Jonas Demeulemeester"
 LABEL maintainer.email="jonas.demeulemeester@kuleuven.be"
 
