@@ -10,7 +10,7 @@ ARG MEGALODONVER=2.3.4
 ENV TZ=Europe/Brussels
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# install fastp
+# install guppy
 RUN apt-get update && \
     apt-get install -y wget lsb-release python3-pip && \
     export PLATFORM=$(lsb_release -cs) && \
@@ -20,5 +20,6 @@ RUN apt-get update && \
     apt install -y ont-guppy=${GUPPYVER} && \
     apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
+# install megalodon
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir megalodon==${MEGALODONVER}

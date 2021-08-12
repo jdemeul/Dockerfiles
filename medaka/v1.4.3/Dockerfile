@@ -1,6 +1,6 @@
-FROM nvidia/cuda:10.1-base-ubuntu18.04
+FROM tensorflow/tensorflow:2.2.2-gpu-py3
 
-LABEL base.image="ubuntu:focal"
+LABEL base.image="tensorflow:2.2.2-gpu-py3"
 LABEL maintainer="Jonas Demeulemeester"
 LABEL maintainer.email="jonas.demeulemeester@kuleuven.be"
 
@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
  libncurses5-dev \
  git \
  git-lfs \
+ file \
  gcc \
  g++ \
  wget \
@@ -36,7 +37,8 @@ RUN git lfs install
 
 RUN git clone --branch v${MEDAKAVER} --depth 1 https://github.com/nanoporetech/medaka.git && \
     cd medaka && \
-    sed -i 's/tensorflow/tensorflow-gpu/' requirements.txt && \
+    sed -i 's/tensorflow/##tensorflow-gpu/' requirements.txt && \
+    sed -i 's/ --prompt/ --system-site-packages --prompt/' Makefile && \ 
     make install
 
 # acts similar to activating python venv before running

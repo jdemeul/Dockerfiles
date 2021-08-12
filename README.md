@@ -1,2 +1,2 @@
 # Dockerfiles
- Repo containing docker files forming the basic of various pipelines
+ Repo containing docker files with the components of various pipelines
