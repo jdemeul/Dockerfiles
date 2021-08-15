@@ -40,7 +40,7 @@ RUN wget https://github.com/samtools/bcftools/releases/download/${BCFTOOLSVER}/b
  tar -xjf bcftools-${BCFTOOLSVER}.tar.bz2 && \
  rm bcftools-${BCFTOOLSVER}.tar.bz2 && \
  cd bcftools-${BCFTOOLSVER} && \
- ./configure --prefix=/usr/bin --enable-perl-filters --enable-libgsl && \
+ ./configure --prefix=/usr --enable-perl-filters --enable-libgsl && \
  make && \
  make install && \
  cd htslib-${BCFTOOLSVER} && make && mv tabix /usr/bin && mv bgzip /usr/bin && \
@@ -48,3 +48,5 @@ RUN wget https://github.com/samtools/bcftools/releases/download/${BCFTOOLSVER}/b
 
 # set perl locale settings
 ENV LC_ALL=C
+
+CMD [ 'bcftools' ]

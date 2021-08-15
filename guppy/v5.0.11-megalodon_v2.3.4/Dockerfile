@@ -12,12 +12,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # install guppy
 RUN apt-get update && \
-    apt-get install -y wget lsb-release python3-pip && \
-    export PLATFORM=$(lsb_release -cs) && \
-    wget -O- https://mirror.oxfordnanoportal.com/apt/ont-repo.pub | apt-key add - && \
-    echo "deb http://mirror.oxfordnanoportal.com/apt ${PLATFORM}-stable non-free" | tee /etc/apt/sources.list.d/nanoporetech.sources.list && \
-    apt-get update && \
-    apt install -y ont-guppy=${GUPPYVER} && \
+    apt-get install -y wget python3-pip && \
+    wget https://mirror.oxfordnanoportal.com/software/analysis/ont-guppy_${GUPPYVER}_linux64.tar.gz && \
+    tar -zxf ont-guppy_${GUPPYVER}_linux64.tar.gz && \
+    mv ont-guppy /opt/ && \
     apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
 # install megalodon

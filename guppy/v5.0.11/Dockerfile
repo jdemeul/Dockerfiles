@@ -6,12 +6,17 @@ LABEL maintainer.email="jonas.demeulemeester@kuleuven.be"
 
 ARG GUPPYVER=5.0.11
 
-# install fastp
+ENV TZ=Europe/Brussels
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# install guppy
 RUN apt-get update && \
-    apt-get install -y wget lsb-release && \
-    export PLATFORM=$(lsb_release -cs) && \
-    wget -O- https://mirror.oxfordnanoportal.com/apt/ont-repo.pub | apt-key add - && \
-    echo "deb http://mirror.oxfordnanoportal.com/apt ${PLATFORM}-stable non-free" | tee /etc/apt/sources.list.d/nanoporetech.sources.list && \
-    apt-get update && \
-    apt install -y ont-guppy=${GUPPYVER} && \
+    apt-get install -y wget && \
+    wget https://mirror.oxfordnanoportal.com/software/analysis/ont-guppy_${GUPPYVER}_linux64.tar.gz && \
+    tar -zxf ont-guppy_${GUPPYVER}_linux64.tar.gz && \
+    mv ont-guppy /opt/ && \
     apt-get autoclean && rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/opt/ont-guppy/bin/:${PATH}"
+
+CMD [ 'guppy_basecaller' ]
