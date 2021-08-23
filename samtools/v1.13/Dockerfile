@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
  perl \
  bzip2 \
  gnuplot \
+ libqt5core5a \
  ca-certificates && \
  apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
@@ -42,6 +43,9 @@ RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLSVER}/s
  make && \
  make install && \
  mkdir /data
+
+# get plot-bamstats to work
+RUN strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5
 
 # set perl locale settings
 ENV LC_ALL=C
