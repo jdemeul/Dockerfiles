@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.2.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.4.0-devel-ubuntu20.04
 
 LABEL base.image="ubuntu:focal"
 LABEL maintainer="Jonas Demeulemeester"
@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y build-essential git cmake zlib1g-dev li
 RUN git clone --recursive https://github.com/lbcb-sci/racon.git racon && \
     cd racon && \
     mkdir build && \
+    sed -i 's/racon_params\[-1\]/racon_params\[18\]/' /racon/scripts/racon_wrapper.py && \
     cmake -B build -DCMAKE_BUILD_TYPE=Release -Dracon_enable_cuda=ON -Dracon_build_wrapper=ON && \
     cd build && make || true && \ 
     sed -i 's/operator""_format/operator_format/' /racon/vendor/GenomeWorks/3rdparty/spdlog/include/spdlog/fmt/bundled/format.h && \
