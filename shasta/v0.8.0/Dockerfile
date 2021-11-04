@@ -20,7 +20,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install --no-install-recommends -y curl ca-certificates && \
  apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
-# install sniffles binary
+# install shasta binary
 RUN cd /usr/bin/ && curl -O -L https://github.com/chanzuckerberg/shasta/releases/download/0.8.0/shasta-Linux-0.8.0 && \
     chmod ugo+x shasta-Linux-0.8.0 && ln -s shasta-Linux-0.8.0 shasta
 
