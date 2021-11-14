@@ -1,11 +1,11 @@
-FROM nvidia/cuda:11.2.1-base-ubuntu20.04
+FROM nvidia/cuda:11.4.2-base-ubuntu20.04
 
 LABEL base.image="ubuntu:focal"
 LABEL maintainer="Jonas Demeulemeester"
 LABEL maintainer.email="jonas.demeulemeester@kuleuven.be"
 
 ARG GUPPYVER=5.0.16
-ARG MEGALODONVER=2.3.5
+ARG MEGALODONVER="6d32ce0"
 ARG RERIOTAG="7952e9a"
 
 ENV TZ=Europe/Brussels
@@ -29,5 +29,8 @@ RUN git clone https://github.com/nanoporetech/rerio && \
     rerio/download_model.py rerio/basecall_models/res_dna_r941_min_modbases_5mC_5hmC_v001
 
 # install megalodon
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir ont-pyguppy-client-lib==${GUPPYVER} megalodon==${MEGALODONVER}
+RUN git clone https://github.com/nanoporetech/megalodon && \
+    cd megalodon && git checkout ${MEGALODONVER} && cd .. && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir ont-pyguppy-client-lib==${GUPPYVER} pyparsing==2.4.7 && \
+    pip install --no-cache-dir -e megalodon/
