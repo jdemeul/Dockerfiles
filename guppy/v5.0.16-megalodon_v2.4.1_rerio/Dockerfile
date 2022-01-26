@@ -4,7 +4,7 @@ LABEL base.image="ubuntu:focal"
 LABEL maintainer="Jonas Demeulemeester"
 LABEL maintainer.email="jonas.demeulemeester@kuleuven.be"
 
-ARG GUPPYVER=6.0.1
+ARG GUPPYVER=5.0.16
 ARG MEGALODONVER="48cae7b"
 ARG RERIOTAG="abb2d37"
 
@@ -37,6 +37,7 @@ RUN cd /megalodon && python3 -m venv venv3
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 RUN pip3 install --no-cache-dir --upgrade pip && \
+    pip3 install --no-cache-dir ont-pyguppy-client-lib==5.0.16 && \
     pip3 install --no-cache-dir -e megalodon/
 
 #     pip install --no-cache-dir --upgrade pip && \

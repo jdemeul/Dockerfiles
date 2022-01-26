@@ -4,9 +4,10 @@ LABEL base.image="ubuntu:focal"
 LABEL maintainer="Jonas Demeulemeester"
 LABEL maintainer.email="jonas.demeulemeester@kuleuven.be"
 
-ARG GUPPYVER=6.0.1
+ARG GUPPYVER=5.0.16
 ARG MEGALODONVER="48cae7b"
 ARG RERIOTAG="abb2d37"
+ARG TAIYAKIVER="9672c66"
 
 ENV TZ=Europe/Brussels
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -32,16 +33,23 @@ RUN git clone https://github.com/nanoporetech/rerio && \
 RUN git clone https://github.com/nanoporetech/megalodon && \
     cd megalodon && git checkout ${MEGALODONVER} && cd ..
 
+# install taiyaki
+RUN git clone https://github.com/nanoporetech/taiyaki && \
+    cd taiyaki && git checkout ${TAIYAKIVER} && cd ..
+
 ENV VIRTUAL_ENV="/megalodon/venv3"
 RUN cd /megalodon && python3 -m venv venv3
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 RUN pip3 install --no-cache-dir --upgrade pip && \
+    pip3 install --no-cache-dir ont-pyguppy-client-lib==5.0.16 && \
     pip3 install --no-cache-dir -e megalodon/
 
-#     pip install --no-cache-dir --upgrade pip && \
-#     # pip install --no-cache-dir ont-pyguppy-client-lib==${GUPPYVER} pyparsing==2.4.7 && \
-#     pip install --no-cache-dir -e megalodon/
+RUN pip3 install --no-cache-dir -e taiyaki/
 
-# RUN pip install --no-cache-dir --upgrade pip && \
-#     pip install --no-cache-dir megalodon==${MEGALODONVER}
+# ENV VIRTUAL_ENV2="/taiyaki/venv3"
+# RUN cd /taiyaki && python3 -m venv venv3
+# ENV PATH="$VIRTUAL_ENV2/bin:$PATH"
+
+# RUN pip3 install --no-cache-dir --upgrade pip && \
+#     pip3 install --no-cache-dir -e taiyaki/

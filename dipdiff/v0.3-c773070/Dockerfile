@@ -43,10 +43,12 @@ RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLSVER}/s
  make install && \
  cd ..
 
+# modified to include latest version of Minimap2 & SVIM-asm
 RUN git clone https://github.com/fenderglass/dipdiff && \
     cd dipdiff && \
     git checkout ${DIPDIFFVER} && \
     git submodule update --init && \
+    git submodule update --remote --merge && \
     make && \
     python3 -m pip install --upgrade pip && \
     pip install -r requirements.txt
