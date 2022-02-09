@@ -46,12 +46,12 @@ RUN cd /opt && \
 
 ENV PATH=/opt/souporcell:/opt/souporcell/troublet/target/release:$PATH
 
-RUN conda install -y python=3.9.5 && \
-    conda install -y -c conda-forge numpy=1.20.3 pandas=1.2.3 scipy=1.5.3 pyvcf=0.6.8 pystan=2.19.1.1 anndata=0.7.8 zarr=2.10.3 networkx=2.6.3 && \
-    conda install -y -c bioconda pysam=0.16.0.1 pyfaidx=0.6.3.1 pegasusio=0.3.1.post2
+# RUN conda install -y python=3.6 && \
+#     conda install -y -c conda-forge -c bioconda numpy scipy pyvcf pystan==2.17.1.0 pysam pyfaidx
 
-    # conda install -y -c conda-forge numpy=1.20.3 pandas=1.2.3 scipy=1.5.3 pyvcf=0.6.8 pystan=2.19.1.1 anndata=0.7.8 zarr=2.10.3 networkx=2.6.3 tensorflow && \
-    # conda install -y -c bioconda pysam=0.16.0.1 pyfaidx=0.6.3.1 pegasusio=0.3.1.post2 
+RUN conda install -y python=3.6.13 && \
+    conda install -y -c conda-forge numpy=1.19.5 pandas=1.1.5 scipy=1.5.3 pyvcf=0.6.8 pystan=2.19.1.1 anndata=0.7.6 zarr=2.8.3 networkx=2.5.1 && \
+    conda install -y -c bioconda pysam=0.16.0.1 pyfaidx=0.6.2 pegasusio=0.2.10
 
 # RUN pip install stratocumulus==0.1.2
 
@@ -95,8 +95,8 @@ RUN cd /opt && \
     mv vartrix_linux vartrix && \
     chmod 777 vartrix
 
-# ADD https://raw.githubusercontent.com/klarman-cell-observatory/cumulus/master/docker/demultiplexing/souporcell/extract_barcodes_from_rna.py /opt
-# ADD https://raw.githubusercontent.com/klarman-cell-observatory/cumulus/master/docker/demultiplexing/souporcell/match_donors.py /opt
+ADD https://raw.githubusercontent.com/klarman-cell-observatory/cumulus/master/docker/demultiplexing/souporcell/extract_barcodes_from_rna.py /opt
+ADD https://raw.githubusercontent.com/klarman-cell-observatory/cumulus/master/docker/demultiplexing/souporcell/match_donors.py /opt
 
 # ADD https://raw.githubusercontent.com/klarman-cell-observatory/cumulus/master/docker/monitor_script.sh /opt
 # RUN chmod a+rx /opt/monitor_script.sh
