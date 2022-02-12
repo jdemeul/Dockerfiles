@@ -14,7 +14,7 @@ RUN apt-get update && \
     apt-get install -y git python3-pip python3-venv && \
     apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
-# install taiyaki
+# install bonito
 RUN git clone --branch v0.5.1 https://github.com/nanoporetech/bonito.git && \
     cd bonito && cd ..
 
@@ -24,5 +24,8 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -e bonito/
+
+# install models
+RUN bonito download --models
 
 CMD [ "bonito" ]
