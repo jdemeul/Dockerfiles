@@ -5,7 +5,7 @@ LABEL maintainer="Jonas Demeulemeester"
 LABEL maintainer.email="jonas.demeulemeester@kuleuven.be"
 
 ARG GUPPYVER=6.0.6
-ARG MEGALODONVER="v2.4.2"
+ARG MEGALODONVER="v2.5.0"
 ARG RERIOTAG="abb2d37"
 
 ENV TZ=Europe/Brussels
