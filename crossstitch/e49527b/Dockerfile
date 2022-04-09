@@ -3,7 +3,8 @@ FROM ubuntu:focal
 # for easy upgrade later. ARG variables only persist during image build
 ARG CROSSSTITCHVER="e49527b"
 ARG HAPCUTVER=1.3.3
-ARG HTSLIBVER=1.13
+ARG HTSLIBVER=1.14
+ARG BCFTOOLSVER=1.14
 
 LABEL base.image="ubuntu:focal"
 LABEL dockerfile.version="1"
@@ -22,6 +23,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
  libncurses5-dev \
  libbz2-dev \
  liblzma-dev \
+ libgsl0-dev \
  libcurl4-gnutls-dev \
  zlib1g-dev \
  libssl-dev \
@@ -32,35 +34,54 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
  make \
  perl \
  bzip2 \
- gnuplot \
+ pigz \
+ perl \
+ libperl-dev \
  default-jre \
  default-jdk \
  ca-certificates && \
  apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
 # install htslib
-RUN wget https://github.com/samtools/htslib/releases/download/1.13/htslib-${HTSLIBVER}.tar.bz2 && \
- tar -xjf htslib-${HTSLIBVER}.tar.bz2 && \
- rm htslib-${HTSLIBVER}.tar.bz2 && \
- cd htslib-${HTSLIBVER} && \
- ./configure --prefix=/usr/ && \
- make && \
- make install
+RUN wget https://github.com/samtools/htslib/releases/download/${HTSLIBVER}/htslib-${HTSLIBVER}.tar.bz2 && \
+    tar -xjf htslib-${HTSLIBVER}.tar.bz2 && \
+    rm htslib-${HTSLIBVER}.tar.bz2 && \
+    cd htslib-${HTSLIBVER} && \
+    ./configure --prefix=/usr/ && \
+    make && \
+    make install
+
+# install bcftools, make /data
+RUN wget https://github.com/samtools/bcftools/releases/download/${BCFTOOLSVER}/bcftools-${BCFTOOLSVER}.tar.bz2 && \
+    tar -xjf bcftools-${BCFTOOLSVER}.tar.bz2 && \
+    rm bcftools-${BCFTOOLSVER}.tar.bz2 && \
+    cd bcftools-${BCFTOOLSVER} && \
+    ./configure --prefix=/usr --enable-perl-filters --enable-libgsl && \
+    make && \
+    make install && \
+    cd htslib-${BCFTOOLSVER} && make && mv tabix /usr/bin && mv bgzip /usr/bin && \
+    cd / && rm -rf bcftools-${BCFTOOLSVER}
 
 # install HapCUT2
 RUN git clone --depth 1 --branch "v.${HAPCUTVER}" https://github.com/vibansal/HapCUT2 && \
     cd HapCUT2 && \
-    make
+    make && \
+    mv /HapCUT2/build/HAPCUT2 /usr/bin && mv /HapCUT2/build/extractHAIRS /usr/bin
 
 # install CrossStitch
 RUN git clone --recursive https://github.com/schatzlab/crossstitch.git && \
     cd crossstitch && \
     git reset --hard ${CROSSSTITCHVER} && \
+    rm -rf Iris && \
     cd vcf2diploid && \
-    make && \
-    cd ../Iris && \
-    ./build.sh && \
-    mv /HapCUT2/build/HAPCUT2 /usr/bin && mv /HapCUT2/build/extractHAIRS /usr/bin
+    make
+
+RUN javac /crossstitch/src/*.java && \
+    sed -i 's/javac/#javac/g' /crossstitch/src/crossstitch.sh && \
+    sed -i 's/\/work-zfs\/mschatz1\/mkirsche\/github\/HapCUT2\/build\///g' /crossstitch/src/crossstitch.sh
+
+COPY crossstitch_short.sh /crossstitch/src/crossstitch_short.sh
+RUN chmod +x /crossstitch/src/crossstitch_short.sh
 
 # set perl locale settings
-CMD [ "/crossstitch/src/crossstitch.sh" ]
+CMD [ "/crossstitch/src/crossstitch_short.sh" ]

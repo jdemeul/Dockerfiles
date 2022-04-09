@@ -16,7 +16,7 @@ ENV TZ=Europe/Brussels
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # install deps and cleanup apt garbage
-RUN apt-get update && apt-get install --no-install-recommends -y curl ca-certificates xz-utils && \
+RUN apt-get update && apt-get install --no-install-recommends -y curl ca-certificates xz-utils gawk && \
  apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
 # install longphase binary
