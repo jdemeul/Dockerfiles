@@ -26,9 +26,10 @@ RUN cd /opt && \
     make && \
     make install
 
-RUN conda install -y -c defaults -c conda-forge -c bioconda pysam
+RUN conda install -y -c defaults -c conda-forge -c bioconda pysam biopython
 
 COPY haplotaggedbam_to_fastq.py /usr/local/bin/
 COPY retag_bam.py /usr/local/bin/
+COPY fix_inversion_ALT.py /usr/local/bin/
 
-RUN chmod +x /usr/local/bin/haplotaggedbam_to_fastq.py /usr/local/bin/retag_bam.py
+RUN chmod +x /usr/local/bin/haplotaggedbam_to_fastq.py /usr/local/bin/retag_bam.py /usr/local/bin/fix_inversion_ALT.py

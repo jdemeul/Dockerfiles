@@ -5,6 +5,7 @@ ARG CROSSSTITCHVER="e49527b"
 ARG HAPCUTVER=1.3.3
 ARG HTSLIBVER=1.14
 ARG BCFTOOLSVER=1.14
+ARG SAMTOOLSVER=1.14
 
 LABEL base.image="ubuntu:focal"
 LABEL dockerfile.version="1"
@@ -62,6 +63,16 @@ RUN wget https://github.com/samtools/bcftools/releases/download/${BCFTOOLSVER}/b
     cd htslib-${BCFTOOLSVER} && make && mv tabix /usr/bin && mv bgzip /usr/bin && \
     cd / && rm -rf bcftools-${BCFTOOLSVER}
 
+# install samtools, make /data
+RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLSVER}/samtools-${SAMTOOLSVER}.tar.bz2 && \
+    tar -xjf samtools-${SAMTOOLSVER}.tar.bz2 && \
+    rm samtools-${SAMTOOLSVER}.tar.bz2 && \
+    cd samtools-${SAMTOOLSVER} && \
+    ./configure && \
+    make && \
+    make install && \
+    mkdir /data
+
 # install HapCUT2
 RUN git clone --depth 1 --branch "v.${HAPCUTVER}" https://github.com/vibansal/HapCUT2 && \
     cd HapCUT2 && \
@@ -76,7 +87,8 @@ RUN git clone --recursive https://github.com/schatzlab/crossstitch.git && \
     cd vcf2diploid && \
     make
 
-RUN javac /crossstitch/src/*.java && \
+RUN sed -i 's/100000/250000/g' crossstitch/src/PhaseSVs.java && \
+    javac /crossstitch/src/*.java && \
     sed -i 's/javac/#javac/g' /crossstitch/src/crossstitch.sh && \
     sed -i 's/\/work-zfs\/mschatz1\/mkirsche\/github\/HapCUT2\/build\///g' /crossstitch/src/crossstitch.sh
 
@@ -84,4 +96,4 @@ COPY crossstitch_short.sh /crossstitch/src/crossstitch_short.sh
 RUN chmod +x /crossstitch/src/crossstitch_short.sh
 
 # set perl locale settings
-CMD [ "/crossstitch/src/crossstitch_short.sh" ]
+CMD [ "/crossstitch/src/crossstitch.sh" ]

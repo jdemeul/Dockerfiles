@@ -36,13 +36,13 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 # install samtools, make /data
 RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLSVER}/samtools-${SAMTOOLSVER}.tar.bz2 && \
- tar -xjf samtools-${SAMTOOLSVER}.tar.bz2 && \
- rm samtools-${SAMTOOLSVER}.tar.bz2 && \
- cd samtools-${SAMTOOLSVER} && \
- ./configure && \
- make && \
- make install && \
- mkdir /data
+    tar -xjf samtools-${SAMTOOLSVER}.tar.bz2 && \
+    rm samtools-${SAMTOOLSVER}.tar.bz2 && \
+    cd samtools-${SAMTOOLSVER} && \
+    ./configure && \
+    make && \
+    make install && \
+    mkdir /data
 
 # get plot-bamstats to work
 RUN strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5
