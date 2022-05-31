@@ -1,7 +1,7 @@
 FROM ubuntu:focal
 
 # for easy upgrade later. ARG variables only persist during image build
-ARG SAMTOOLSVER=1.14
+ARG SAMTOOLSVER=1.15.1
 
 LABEL base.image="ubuntu:focal"
 LABEL dockerfile.version="1"

@@ -1,12 +1,12 @@
 FROM ubuntu:focal
 
 # for easy upgrade later. ARG variables only persist during image build
-ARG SAMTOOLSVER=1.14
+ARG BCFTOOLSVER=1.15.1
 
 LABEL base.image="ubuntu:focal"
 LABEL dockerfile.version="1"
 LABEL software="Samtools"
-LABEL software.version="1.13"
+LABEL software.version="1.15.1"
 LABEL description="Tools (written in C using htslib) for manipulating next-generation sequencing data"
 LABEL website="https://github.com/samtools/samtools"
 LABEL license="https://github.com/samtools/samtools/blob/develop/LICENSE"
@@ -20,6 +20,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install --no-install-recommends -y \
  libncurses5-dev \
  libbz2-dev \
+ libgsl-dev \
  liblzma-dev \
  libcurl4-gnutls-dev \
  zlib1g-dev \
@@ -27,28 +28,25 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
  gcc \
  wget \
  make \
- bc \
  perl \
+ libperl-dev \
  bzip2 \
  gnuplot \
- libqt5core5a \
  ca-certificates && \
  apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
 # install samtools, make /data
-RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLSVER}/samtools-${SAMTOOLSVER}.tar.bz2 && \
-    tar -xjf samtools-${SAMTOOLSVER}.tar.bz2 && \
-    rm samtools-${SAMTOOLSVER}.tar.bz2 && \
-    cd samtools-${SAMTOOLSVER} && \
-    ./configure && \
-    make && \
-    make install && \
-    mkdir /data
-
-# get plot-bamstats to work
-RUN strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5
+RUN wget https://github.com/samtools/bcftools/releases/download/${BCFTOOLSVER}/bcftools-${BCFTOOLSVER}.tar.bz2 && \
+ tar -xjf bcftools-${BCFTOOLSVER}.tar.bz2 && \
+ rm bcftools-${BCFTOOLSVER}.tar.bz2 && \
+ cd bcftools-${BCFTOOLSVER} && \
+ ./configure --prefix=/usr --enable-perl-filters --enable-libgsl && \
+ make && \
+ make install && \
+ cd htslib-${BCFTOOLSVER} && make && mv tabix /usr/bin && mv bgzip /usr/bin && \
+ cd / && rm -rf bcftools-${BCFTOOLSVER}
 
 # set perl locale settings
 ENV LC_ALL=C
 
-WORKDIR /data
+CMD [ 'bcftools' ]
