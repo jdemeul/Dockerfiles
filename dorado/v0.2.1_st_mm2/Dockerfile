@@ -1,7 +1,7 @@
 FROM ubuntu:jammy
 
 # for easy upgrade later. ARG variables only persist during image build
-ARG SAMTOOLSVER=1.16.1
+ARG SAMTOOLSVER=1.17
 ARG DORADOVER=0.2.1
 ARG MINIMAP2VER=2.24
 
