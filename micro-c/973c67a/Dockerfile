@@ -57,6 +57,8 @@ RUN curl -L https://github.com/smithlabcode/preseq/releases/download/v3.1.2/pres
     ./configure --enable-hts CPPFLAGS='-I /home/ubuntu/samtools-1.11/htslib-1.11/' LDFLAGS='-L/home/ubuntu/samtools-1.11/htslib-1.11/' && \
     make -j $(nproc) && make install
 
+RUN git clone https://github.com/dovetail-genomics/Micro-C.git
+
 RUN apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
 ENV LC_ALL=C.UTF-8
