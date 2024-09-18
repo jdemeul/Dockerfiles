@@ -1,5 +1,5 @@
 # Docker inheritance
-FROM bioconductor/bioconductor_docker:RELEASE_3_19-R-4.4.0
+FROM bioconductor/bioconductor_docker:RELEASE_3_19-R-4.4.1
 
 # Update apt-get
 RUN apt-get update \
@@ -11,6 +11,6 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Install required Bioconductor package
-RUN R -e 'BiocManager::install(c("optparse", "data.table", "dplyr", "parallel", "Rsamtools", "IRanges"))'
+RUN R -e 'BiocManager::install(c("optparse", "data.table", "dplyr", "parallel", "Rsamtools", "IRanges", "ggplot2", "RColorBrewer", "pwalign"))'
 
 RUN git clone https://github.com/jdemeul/smMIP-tools.git
